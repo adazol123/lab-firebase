@@ -1,6 +1,5 @@
 export const initialState = {
-  isNavToggled: false,
-  isNavExpanded: false,
+  isAdminNavToggled: false,
 };
 
 export const createMetadataSlice = (set) => ({
