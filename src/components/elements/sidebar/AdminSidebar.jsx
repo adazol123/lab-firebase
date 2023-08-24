@@ -9,11 +9,12 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useGlobalStoreOnly } from "../../../store";
 
 const AdminSidebar = () => {
-  const [isOpen, setIsOpen] = React.useState(true);
+  const { metadata, dispatchMetadata } = useGlobalStoreOnly(store => store)
   const navigate = useNavigate();
-
+  const isOpen = metadata.isAdminNavToggled
   const menu = [
     {
       label: "Dashboard",
@@ -56,6 +57,13 @@ const AdminSidebar = () => {
       ],
     },
   ];
+
+  const handleToggle = () => {
+    dispatchMetadata({
+        isAdminNavToggled: !metadata.isAdminNavToggled
+      
+    })
+  }
   return (
     <div
       className={`${
@@ -66,7 +74,7 @@ const AdminSidebar = () => {
         title={isOpen ? "Collapse" : "Expand"}
         className={`transition-transform duration-400 absolute cursor-pointer rounded-full -right-3 top-4 border-2 border-zinc-900 p-1 hover:bg-gray-200 bg-gray-200 text-zinc-900 hover:text-gray-800 focus:outline-none
         ${isOpen ? "rotate-0" : "rotate-180"}`}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
       >
         <IconChevronLeft size={12} stroke={4} />
       </button>

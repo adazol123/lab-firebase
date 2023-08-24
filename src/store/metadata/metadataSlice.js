@@ -5,12 +5,12 @@ export const initialState = {
 export const createMetadataSlice = (set) => ({
   metadata: initialState,
   //inside react component setter
-  setGeneral(payload) {
+  dispatchMetadata(payload) {
     set(
       (state) => ({
         ...state,
-        metdata: {
-          ...state.metdata,
+        metadata: {
+          ...state.metadata,
           ...payload,
         },
       }),
