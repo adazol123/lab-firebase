@@ -1,17 +1,16 @@
 export const initialState = {
-  isNavToggled: false,
-  isNavExpanded: false,
+  isAdminNavToggled: false,
 };
 
 export const createMetadataSlice = (set) => ({
   metadata: initialState,
   //inside react component setter
-  setGeneral(payload) {
+  dispatchMetadata(payload) {
     set(
       (state) => ({
         ...state,
-        metdata: {
-          ...state.metdata,
+        metadata: {
+          ...state.metadata,
           ...payload,
         },
       }),
