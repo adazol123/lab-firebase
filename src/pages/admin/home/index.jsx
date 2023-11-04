@@ -1,6 +1,19 @@
+import { useEffect } from "react";
 import AdminLayout from "../../../components/layouts/AdminLayout";
-
+import { io, Manager } from "socket.io-client";
+import { useState } from "react";
 function AdminHome() {
+  const URL = "https://whiteboard-vd3nhvi5ua-uc.a.run.app";
+  const socket = io(URL);
+  socket.on("stocks", (data) => {
+    console.log(data);
+  });
+  const [val, setVal] = useState("");
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    socket.emit("heartbeat", {value: val});
+  };
   return (
     <AdminLayout.Content>
       <AdminLayout.ContentBox>
@@ -15,6 +28,14 @@ function AdminHome() {
         recusandae qui sequi praesentium! Delectus laudantium libero minus
         voluptatem laboriosam, voluptates quod explicabo ea eum molestiae iure
         maiores.
+        <form onSubmit={submitForm}>
+          <input
+            type="text"
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+          />
+          <button type="submit">Submit</button>
+        </form>
       </AdminLayout.ContentBox>
       <AdminLayout.ContentBox>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est,
