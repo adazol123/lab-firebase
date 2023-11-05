@@ -5,20 +5,22 @@ import { useState } from "react";
 function AdminHome() {
   const URL = "https://whiteboard-vd3nhvi5ua-uc.a.run.app";
   const socket = io(URL, {
-    path: '/ws',
+    path: "/ws",
     autoConnect: true,
     reconnection: false,
-    transports: ['websocket'],
-    withCredentials: true
+    transports: ["websocket"],
+    withCredentials: true,
   });
-  socket.on("stocks", (data) => {
-    console.log(data);
-  });
+  useEffect(() => {
+    socket.on("stocks", (data) => {
+      console.log(data);
+    });
+  }, []);
   const [val, setVal] = useState("");
 
   const submitForm = (e) => {
     e.preventDefault();
-    socket.emit("heartbeat", {value: val});
+    socket.emit("heartbeat", { value: val });
   };
   return (
     <AdminLayout.Content>
