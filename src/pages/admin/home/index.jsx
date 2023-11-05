@@ -29,8 +29,10 @@ function AdminHome() {
       connCount--;
     });
 
+    console.log(connCount);
     return () => socket.close();
   }, []);
+
   const [val, setVal] = useState("");
 
   const submitForm = (e) => {

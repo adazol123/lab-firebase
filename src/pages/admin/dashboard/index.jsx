@@ -27,7 +27,7 @@ function AdminDashboard() {
     socket.on("disconnect", () => {
       connCount--;
     });
-
+    console.log(connCount);
     return () => socket.close();
   }, []);
   return (
