@@ -4,7 +4,13 @@ import { io, Manager } from "socket.io-client";
 import { useState } from "react";
 function AdminHome() {
   const URL = "https://whiteboard-vd3nhvi5ua-uc.a.run.app";
-  const socket = io(URL);
+  const socket = io(URL, {
+    path: '/ws',
+    autoConnect: true,
+    reconnection: false,
+    transports: ['websocket'],
+    withCredentials: true
+  });
   socket.on("stocks", (data) => {
     console.log(data);
   });
