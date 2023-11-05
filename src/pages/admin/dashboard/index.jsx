@@ -5,7 +5,13 @@ import { useEffect } from "react";
 
 function AdminDashboard() {
   const URL = "https://whiteboard-vd3nhvi5ua-uc.a.run.app";
-  const socket = io(URL);
+  const socket = io(URL,{
+    path: '/ws',
+    autoConnect: true,
+    reconnection: false,
+    transports: ['websocket'],
+    withCredentials: true
+  });
   useEffect(() => {
     //socket.io.connect();
     //const ss = mngr.socket("/");
