@@ -1,23 +1,34 @@
-import React from "react";
+import {} from "react";
 import AdminLayout from "../../../components/layouts/AdminLayout";
-import { io, Manager } from "socket.io-client";
+import { io } from "socket.io-client";
 import { useEffect } from "react";
 
+let connCount = 0;
 function AdminDashboard() {
   const URL = "https://whiteboard-vd3nhvi5ua-uc.a.run.app";
-  const socket = io(URL,{
-    path: '/ws',
+  const socket = io(URL, {
+    path: "/ws",
     autoConnect: true,
     reconnection: false,
-    transports: ['websocket'],
-    withCredentials: true
+    transports: ["websocket"],
+    withCredentials: true,
   });
   useEffect(() => {
-    //socket.io.connect();
-    //const ss = mngr.socket("/");
-    socket.on("heartbeat", (data) => {
-      console.log("heartbeat:", data);
+    if (connCount === 0) {
+      connCount++;
+      socket.open();
+      socket.on("heartbeat", (data) => {
+        console.log("heartbeat:", data);
+      });
+    } else {
+      socket.close();
+    }
+
+    socket.on("disconnect", () => {
+      connCount--;
     });
+
+    return () => socket.close();
   }, []);
   return (
     <AdminLayout.Content>

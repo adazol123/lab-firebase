@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import AdminLayout from "../../../components/layouts/AdminLayout";
-import { io, Manager } from "socket.io-client";
+import { io } from "socket.io-client";
 import { useState } from "react";
+let connCount = 0;
 function AdminHome() {
   const URL = "https://whiteboard-vd3nhvi5ua-uc.a.run.app";
   const socket = io(URL, {
@@ -10,12 +11,25 @@ function AdminHome() {
     reconnection: false,
     transports: ["websocket"],
     withCredentials: true,
-    
   });
   useEffect(() => {
-    socket.on("stocks", (data) => {
-      console.log(data);
+    socket.on("connect", () => {
+      if (connCount === 0) {
+        connCount++;
+        socket.open();
+        socket.on("stocks", (data) => {
+          console.log(data);
+        });
+      } else {
+        socket.close();
+      }
     });
+
+    socket.on("disconnect", () => {
+      connCount--;
+    });
+
+    return () => socket.close();
   }, []);
   const [val, setVal] = useState("");
 
