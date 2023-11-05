@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import AdminLayout from "../../../components/layouts/AdminLayout";
 import { io } from "socket.io-client";
 import { useState } from "react";
-let connCount = 0;
+
 function AdminHome() {
   const URL = "https://whiteboard-vd3nhvi5ua-uc.a.run.app";
   const socket = io(URL, {
@@ -13,23 +13,11 @@ function AdminHome() {
     withCredentials: true,
   });
   useEffect(() => {
-    socket.on("connect", () => {
-      if (connCount === 0) {
-        connCount++;
-        socket.open();
-        socket.on("stocks", (data) => {
-          console.log(data);
-        });
-      } else {
-        socket.close();
-      }
+    socket.once("connect", () => {
+      socket.once("stocks", (data) => {
+        console.log(data);
+      });
     });
-
-    socket.on("disconnect", () => {
-      connCount--;
-    });
-
-    console.log(connCount);
     return () => socket.close();
   }, []);
 

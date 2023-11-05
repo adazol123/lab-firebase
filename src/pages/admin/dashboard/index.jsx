@@ -3,7 +3,6 @@ import AdminLayout from "../../../components/layouts/AdminLayout";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
 
-let connCount = 0;
 function AdminDashboard() {
   const URL = "https://whiteboard-vd3nhvi5ua-uc.a.run.app";
   const socket = io(URL, {
@@ -14,20 +13,12 @@ function AdminDashboard() {
     withCredentials: true,
   });
   useEffect(() => {
-    if (connCount === 0) {
-      connCount++;
-      socket.open();
-      socket.on("heartbeat", (data) => {
+    socket.once("connect", () => {
+      socket.once("heartbeat", (data) => {
         console.log("heartbeat:", data);
       });
-    } else {
-      socket.close();
-    }
-
-    socket.on("disconnect", () => {
-      connCount--;
     });
-    console.log(connCount);
+
     return () => socket.close();
   }, []);
   return (
