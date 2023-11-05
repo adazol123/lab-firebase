@@ -11,13 +11,15 @@ import Profile from "../pages/profile";
 import AdminPage from "../pages/admin";
 import AdminDashboard from "../pages/admin/dashboard";
 import AdminHome from "../pages/admin/home";
+import { io } from "socket.io-client";
+import { useEffect } from "react";
+import { useGlobalStoreOnly } from "../store";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     caseSensitive: false,
-
   },
   {
     path: "/admin",
@@ -27,29 +29,29 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <AdminDashboard />,
-        caseSensitive: false
+        caseSensitive: false,
       },
       {
         path: "home",
         element: <AdminHome />,
-        caseSensitive: false
+        caseSensitive: false,
       },
       {
         path: "market",
         element: <AdminHome />,
-        caseSensitive: false
+        caseSensitive: false,
       },
       {
         path: "guide",
         element: <AdminDashboard />,
-        caseSensitive: false
+        caseSensitive: false,
       },
       {
         path: "*",
         element: <AdminDashboard />,
-        caseSensitive: false
+        caseSensitive: false,
       },
-    ]
+    ],
   },
   {
     path: "/profile",
@@ -102,7 +104,34 @@ const router = createBrowserRouter([
     element: <Auction />,
   },
 ]);
+const URL = "https://api.fuzzcapital.com";
+const socket = io(URL, {
+  path: "/ws",
+  autoConnect: true,
+  reconnection: true,
+  transports: ["websocket"],
+  withCredentials: true,
+});
 
-const Router = () => <RouterProvider router={router} />;
+const Router = () => {
+  const setMeta = useGlobalStoreOnly((store) => store.dispatchMetadata);
+  const metadata = useGlobalStoreOnly((store) => store.metadata);
+
+  socket.on("connect", () => {
+    socket.on("heartbeat", (data) => {
+      console.log("heartbeat:", data);
+      setMeta({ ...metadata, heartbeat: data });
+    });
+    socket.on("stocks", (data) => {
+      setMeta({ ...metadata, stocks: data });
+    });
+  });
+  //setMeta({ ...metadata, socket });
+  //useEffect(() => {
+
+  //  return () => socket.close();
+  //}, []);
+  return <RouterProvider router={router} />;
+};
 
 export default Router;
