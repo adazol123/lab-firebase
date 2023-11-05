@@ -10,6 +10,7 @@ function AdminHome() {
     reconnection: false,
     transports: ["websocket"],
     withCredentials: true,
+    
   });
   useEffect(() => {
     socket.on("stocks", (data) => {
