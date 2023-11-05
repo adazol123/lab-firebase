@@ -1,5 +1,10 @@
+import { Socket } from "socket.io-client";
+
 export const initialState = {
   isAdminNavToggled: false,
+  heartbeat: {},
+  stocks: [],
+  socket: Socket
 };
 
 export const createMetadataSlice = (set) => ({

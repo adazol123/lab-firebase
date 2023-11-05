@@ -1,18 +1,17 @@
 import { useEffect } from "react";
 import AdminLayout from "../../../components/layouts/AdminLayout";
-import { io, Manager } from "socket.io-client";
+import { io } from "socket.io-client";
 import { useState } from "react";
+import { useGlobalStoreOnly } from "../../../store";
+
 function AdminHome() {
-  const URL = "https://whiteboard-vd3nhvi5ua-uc.a.run.app";
-  const socket = io(URL);
-  socket.on("stocks", (data) => {
-    console.log(data);
-  });
+  const socket = useGlobalStoreOnly(store => store.metadata.socket)
+
   const [val, setVal] = useState("");
 
   const submitForm = (e) => {
     e.preventDefault();
-    socket.emit("heartbeat", {value: val});
+    //socket.emit("heartbeat", { value: val });
   };
   return (
     <AdminLayout.Content>

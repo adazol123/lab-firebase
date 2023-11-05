@@ -1,22 +1,24 @@
-import React from "react";
+import {} from "react";
 import AdminLayout from "../../../components/layouts/AdminLayout";
-import { io, Manager } from "socket.io-client";
+import { io } from "socket.io-client";
 import { useEffect } from "react";
+import { useGlobalStoreOnly } from "../../../store";
 
 function AdminDashboard() {
-  const URL = "https://whiteboard-vd3nhvi5ua-uc.a.run.app";
-  const socket = io(URL);
-  useEffect(() => {
-    //socket.io.connect();
-    //const ss = mngr.socket("/");
-    socket.on("heartbeat", (data) => {
-      console.log("heartbeat:", data);
-    });
-  }, []);
+  const crypto = useGlobalStoreOnly(store => store.metadata?.stocks?.crypto)
   return (
     <AdminLayout.Content>
       <AdminLayout.ContentBox className="min-h-screen">
         Admin Dashboards
+        {crypto?.length? crypto.map((c,index) => {
+
+          return (
+            <div key={c.name}>
+              <span className="text-slate-300">{c.name}</span>
+              <span className="text-emerald-400 inline-block px-2">{c.price}</span>
+            </div>
+          )
+        }) : null}
       </AdminLayout.ContentBox>
       <div className="px-6 bg-zinc-950 sticky top-0 py-4">Sticky Header</div>
       <AdminLayout.ContentBox className="min-h-screen">

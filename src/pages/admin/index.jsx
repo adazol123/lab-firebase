@@ -1,7 +1,7 @@
-import React from 'react'
-import AdminLayout from '../../components/layouts/AdminLayout'
-import { Outlet } from 'react-router-dom'
-import AdminHeader from '../../components/elements/header/AdminHeader'
+import React from "react";
+import AdminLayout from "../../components/layouts/AdminLayout";
+import { Outlet } from "react-router-dom";
+import AdminHeader from "../../components/elements/header/AdminHeader";
 
 function AdminPage() {
   return (
@@ -11,7 +11,7 @@ function AdminPage() {
         <Outlet />
       </div>
     </AdminLayout>
-  )
+  );
 }
 
-export default AdminPage
+export default AdminPage;
